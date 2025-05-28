@@ -24,17 +24,20 @@ for filepath in filepaths:
     pdf.cell(w=0, h=20, txt=f"Invoice No# {invoice_no}", ln=1)
     pdf.cell(w=0, h=16, txt=f"Date: {date_list[2]}/{date_list[1]}/{date_list[0]}", ln=2)
 
+
+    df=pd.read_excel(filepath)
+
+    headers = [item.replace("_", " ").title() for item in df.columns] # list comprehension
     # add table headers
     pdf.set_font(family="Times", size=10)
 
-    pdf.cell(w=25, h=10, txt="Product ID", border=1)
-    pdf.cell(w=45, h=10, txt="Product name", border=1)
-    pdf.cell(w=60, h=10, txt="Amount purchased", border=1)
-    pdf.cell(w=35, h=10, txt="Price per unit", border=1)
-    pdf.cell(w=20, h=10, txt="Total price", border=1, ln=1)
+    pdf.cell(w=25, h=10, txt=headers[0], border=1)
+    pdf.cell(w=45, h=10, txt=headers[1], border=1)
+    pdf.cell(w=60, h=10, txt=headers[2], border=1)
+    pdf.cell(w=35, h=10, txt=headers[3], border=1)
+    pdf.cell(w=20, h=10, txt=headers[4], border=1, ln=1)
 
-    
-    df=pd.read_excel(filepath)
+
     for index, row in df.iterrows():
         pdf.set_font(family="Times", size=10)
         pdf.cell(w=25, h=10, txt=str(row["product_id"]), border=1)

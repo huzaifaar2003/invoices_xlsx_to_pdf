@@ -7,7 +7,7 @@ import os
 filepaths = glob.glob("invoices_excel/*.xlsx")
 
 print(filepaths)
-total = 0
+
 for filepath in filepaths:
 
     # sheet_name because an excel file can have multiple sheets
@@ -26,7 +26,7 @@ for filepath in filepaths:
 
 
     df=pd.read_excel(filepath)
-
+    total = df["total_price"].sum()
     headers = [item.replace("_", " ").title() for item in df.columns] # list comprehension
     # add table headers
     pdf.set_font(family="Times", size=10)
@@ -45,10 +45,18 @@ for filepath in filepaths:
         pdf.cell(w=60, h=10, txt=str(row["amount_purchased"]), border=1)
         pdf.cell(w=35, h=10, txt=str(row["price_per_unit"]), border=1)
         pdf.cell(w=20, h=10, txt=str(row["total_price"]), border=1, ln=1)
-        total = total + row["total_price"]
+
+    pdf.cell(w=25, h=10, txt="", border=1)
+    pdf.cell(w=45, h=10, txt="", border=1)
+    pdf.cell(w=60, h=10, txt="", border=1)
+    pdf.cell(w=35, h=10, txt="", border=1)
+    pdf.cell(w=20, h=10, txt=str(total), border=1, ln=1)
+    
     pdf.ln(2)
-    pdf.set_font(family="Times", style="ib", size=20)
-    pdf.cell(w=20, h=10, txt=f"Total Price: {total}")
+    pdf.set_font(family="Times", style="ib", size=10)
+    pdf.cell(w=20, h=10, txt=f"Total amount due is: -/{total} Dorral")
+
+    pdf.image("r.png", x=10, y= 100, w= 10, type="png")
 
     # create directory after checking its existence
     if os.path.isdir("PDFs") == False:

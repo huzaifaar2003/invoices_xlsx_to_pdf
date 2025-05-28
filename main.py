@@ -14,12 +14,14 @@ for filepath in filepaths:
     # extracting invoice number
     filename = pathlib.Path(filepath).stem
     invoice_no = filename.split("-")[0]
+    date_list = filename.split("-")[1].split(".")
 
     # create a pdf corresponding to each excel invoice
     pdf = fpdf.FPDF(orientation="P", unit='mm', format="A4")
     pdf.add_page()
-    pdf.set_font(family="Times",style="B", size=16)
-    pdf.cell(w=0, h=20, txt=f"Invoice No# {invoice_no}")
+    pdf.set_font(family="Times",style="B", size=20)
+    pdf.cell(w=0, h=20, txt=f"Invoice No# {invoice_no}", ln=1)
+    pdf.cell(w=0, h=16, txt=f"Date: {date_list[2]}/{date_list[1]}/{date_list[0]}")
 
     # create directory after checking its existence
     if os.path.isdir("PDFs") == False:
